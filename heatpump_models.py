@@ -17,7 +17,6 @@ mfrs = [
 def get_vendor_types():
     """Scrapes all Heatpump types togehther with their IDs from the downloads page"""
     for mfr in mfrs:
-        #  print(f" :: Fetch types of {mfr['manufacturer']}")
         r = requests.get(
             f"https://www.heatpump24.com/DownloadArea.php?layout={mfr['mfrid']}&lang=5"
         )
@@ -33,57 +32,17 @@ def get_vendor_types():
                     "type": type,
                 }
             )
-            #  print(f"Manufacturer {mfr['manufacturer']} :: id: {typeid} -> type {type}")
 
-
+            
 def get_details():
     for heatpump in data:
-        #  print(f" :: Fetch models of {heatpump['manufacturer']} -> {heatpump['type']}")
         r = requests.post(
             "https://www.heatpump24.com/software/fetchSoftware.php",
             data={"idTyp": heatpump["type_id"]},
         )
         heatpump["models"] = r.json()
 
-
-x = {
-    "manufacturer": "Alpha Innotec",
-    "manufacturer_id": 1,
-    "type_id": "40",
-    "type": "LWAV",
-    "models": [
-        {
-            "name": "LW 161H-A/V",
-            "Art_Nr": "10064902",
-            "software": "2",
-            "encoding": "85",
-            "id": "LW 161H-A/V",
-        },
-        {
-            "name": "LWAV 122R3",
-            "Art_Nr": "10077741",
-            "software": "2",
-            "encoding": "82",
-            "id": "LWAV 122R3",
-        },
-        {
-            "name": "LWAV 82R1/3",
-            "Art_Nr": "100776",
-            "software": "2",
-            "encoding": "81",
-            "id": "LWAV 82R1/3",
-        },
-        {
-            "name": "LWAV+82R1/3",
-            "Art_Nr": "100778",
-            "software": "2",
-            "encoding": "0",
-            "id": "LWAV+82R1/3",
-        },
-    ],
-}
-
-
+        
 def dump_data():
     console = Console()
     table = Table(show_header=True, header_style="bold magenta")
