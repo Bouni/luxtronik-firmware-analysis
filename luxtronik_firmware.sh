@@ -28,7 +28,7 @@ gzip -qdkc "$filename.gz" | tar xf -
 rm "$filename.gz"
 
 echo "Verify Checksum"
-find . -name 'home.wp2reg*.md5' -print0 | xargs -0 md5sum -c
+find . -name 'home.*.md5' -print0 | xargs -0 md5sum -c
 
 if [ $? -ne 0  ]; then
     echo "Error, checksum does not match!"
@@ -36,7 +36,7 @@ if [ $? -ne 0  ]; then
 fi
 
 # Delete md5 sum file, not needed anymore
-rm home.wp2reg*.md5
+rm home.*.md5
 
 # Rename tar file to make tar happy
 filename=$(find . -name 'home.wp2reg*')
