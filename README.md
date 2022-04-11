@@ -122,3 +122,26 @@ Use `ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 -c aes256-cbc root@192.168.
 
 ⚠ ATTENTION ⚠ You are logged in as root which mean that you can easily destroy your heatpump. Be careful with waht you do!
 
+**Edit April 2022**: 
+
+The on my system installed OpenSSH client `OpenSSH_8.9p1, OpenSSL 1.1.1n  15 Mar 2022` does no longer support the `SSH protocol v.1` and therefore the command from above does no longer work.
+But I've added a Dockerfile together with a ssh config file and a stript to start the container and drop you in a shell within that container. From there you can ssh into the heatpump.
+make sure to adjust the IP address in the config file before you attempt log into your heatpump.
+
+
+```
+cd ssh
+./legacy-ssh.sh
+
+# You'll see a bash prompt saying
+# bash-5.0#
+
+ssh luxtronik
+
+#Enter ssh passwort for root user and you're logged in 
+```
+
+## Filetree
+
+See [FILETREE.md](FILETREE.md)
+
