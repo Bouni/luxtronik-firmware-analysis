@@ -1,0 +1,5 @@
+Host luxtronik
+  HostName 192.168.178.100
+  KexAlgorithms +diffie-hellman-group1-sha1 
+  Ciphers aes256-cbc 
+  User root
