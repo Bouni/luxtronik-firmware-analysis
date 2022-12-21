@@ -1,6 +1,8 @@
 #!/bin/sh
 
-if ! command -v john &> /dev/null;
+command -v john > /dev/null 2>&1
+
+if [ $? -gt 0 ] ;
 then
     echo "john seems not to be installed, install it to use this script"
     echo "More infos: https://www.openwall.com/john/"
@@ -13,6 +15,7 @@ fi
 if test -f "firmware/share/passwd" && test -f "firmware/share/shadow"; then
     echo "passwd and shadow exists, attempt to get root password."
     unshadow "firmware/share/passwd" "firmware/share/shadow" > unshadow.txt
+    john --incremental unshadow.txt > /dev/null 2>&1
     cracked=$(john --show unshadow.txt 2> /dev/null | grep root)
     user=$(echo $cracked | cut -d ':' -f 1)
     password=$(echo $cracked | cut -d ':' -f 2)
