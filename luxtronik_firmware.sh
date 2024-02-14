@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 read -p "Select software ID out of 0, 1, 2, 3, 4: " softwareID
 
@@ -14,12 +14,14 @@ echo "Latest firmware is $filename"
 if [[ "$filename" == *"wpreg."*  ]]; then
     curl -s "https://www.heatpump24.com/software/fetchSoftware.php?softwareID=$softwareID" --output "$filename"
     echo "Downloaded as $filename"
-    echo "Firmware $filename cannot be decompressed, only analisys via binwalk is possible ..."
+    echo "Firmware $filename can be decompressed with python via \"./extract_V1_firmware.py $filename\"."
     exit
 else
     curl -s "https://www.heatpump24.com/software/fetchSoftware.php?softwareID=$softwareID" --output "$filename.gz"
     echo "Downloaded as $filename.gz"
 fi
+
+exit 0
 
 
 echo "Decompress downloaded firmware"
