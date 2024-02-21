@@ -18,6 +18,8 @@ def extract(filename, dirname):
     with open(filename, "rb") as fd:
         content = fd.read()
 
+    found_archive = False
+
     while len(content) > 0:
         # Read header
         header = content[0:0x100]
@@ -47,49 +49,58 @@ def extract(filename, dirname):
         print("timestamp: ", timestamp)
         print("permissions: ", bin(permissions))
 
-        with open(dirname + header.decode("utf8"), "wb") as fd:
+        filename = header.decode("utf8")
+
+        # Don't leave the directory.
+        filename = filename.replace("../", "")
+
+        if filename == "appl.archive":
+            found_archive = True
+
+        os.makedirs(dirname + os.path.dirname(filename), exist_ok=True)
+
+        with open(dirname + filename, "wb") as fd:
             fd.write(content[0x100 : 0x100 + filelength])
 
         # Now, one could set the time stamp and the permissions.
 
         content = content[filelength + 0x100 :]
 
-    os.chdir(dirname)
-
-    print('\nExtracting "appl.archive" to %sarchive/' % dirname)
-
-    dirname = b"archive/"
-
-    os.makedirs(dirname, exist_ok=True)
-
-    with gzip.open("appl.archive") as fd:
-        content = fd.read()
-
-    idx = 0
-
-    content = content[idx:]
-
-    while len(content) > 0:
-        length = int.from_bytes(content[0:3], byteorder="big")
-        permissions = int.from_bytes(content[3:6], byteorder="big")
-        filenamelength = int(content[6])
-
-        filename = content[7 : 7 + filenamelength].rstrip(zero)
-
-        print()
-        print('name: "%s"' % filename.decode("utf8"))
-        print("permissions: ", bin(permissions))
-
-        content = content[7 + filenamelength :]
-
-        os.makedirs(dirname + os.path.dirname(filename), exist_ok=True)
-
-        with open(dirname + filename, "wb") as fd:
-            fd.write(content[:length])
-
-        # Now, one could set the permissions.
-
-        content = content[length:]
+    if found_archive:
+        os.chdir(dirname)
+ 
+        print('\nExtracting "appl.archive" to %sarchive/' % dirname)
+ 
+        dirname = b"archive/"
+ 
+        with gzip.open("appl.archive") as fd:
+            content = fd.read()
+ 
+        idx = 0
+ 
+        content = content[idx:]
+ 
+        while len(content) > 0:
+            length = int.from_bytes(content[0:3], byteorder="big")
+            permissions = int.from_bytes(content[3:6], byteorder="big")
+            filenamelength = int(content[6])
+ 
+            filename = content[7 : 7 + filenamelength].rstrip(zero)
+ 
+            print()
+            print('name: "%s"' % filename.decode("utf8"))
+            print("permissions: ", bin(permissions))
+ 
+            content = content[7 + filenamelength :]
+ 
+            os.makedirs(dirname + os.path.dirname(filename), exist_ok=True)
+ 
+            with open(dirname + filename, "wb") as fd:
+                fd.write(content[:length])
+ 
+            # Now, one could set the permissions.
+ 
+            content = content[length:]
 
 
 if __name__ == "__main__":
