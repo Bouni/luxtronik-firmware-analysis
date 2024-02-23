@@ -1,4 +1,14 @@
 #!/bin/bash
+echo "======================================="
+echo "Luxtronik firmware download and extract"
+echo "======================================="
+echo ""
+echo "0 => Firmware 1.xx.x"
+echo "1 => Firmware 2.xx.x"
+echo "2 => Firmware 3.xx.x"
+echo "3 => Firmware 4.xx.x"
+echo "4 => Firmware F1.xx.x"
+echo ""
 
 read -p "Select software ID out of 0, 1, 2, 3, 4: " softwareID
 
