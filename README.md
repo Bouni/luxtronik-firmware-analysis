@@ -131,7 +131,7 @@ make sure to adjust the IP address in the config file before you attempt log int
 
 ```
 cd ssh
-./legacy-ssh.sh
+./legacy_ssh.sh
 
 # You'll see a bash prompt saying
 # bash-5.0#
